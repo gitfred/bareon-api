@@ -172,7 +172,8 @@ def make_parted_and_partitions(disk):
             label='gpt',
             name='/dev/{0}'.format(disk['device']),
             # Partitions should be created in specific order
-            partitions=sorted(partitions[device].values(), key=lambda v: v.count),
+            partitions=sorted(
+                partitions[device].values(), key=lambda v: v.count),
             install_bootloader=True
         )
 
@@ -214,7 +215,9 @@ def get_nodes_and_disks():
     # it should be added as a info to the ohai data
     # during the discovery
     def is_disk(block_device):
-        return block_device.get('vendor') in ['ATA', ]
+        return (block_device.get('vendor') in ('ATA', )
+                # disks from nailgun scanner
+                or block_device.get('model'))
 
     def get_nodes_discovery_data():
         discovery_url = 'http://{ip}:{port}/'.format(
@@ -239,7 +242,8 @@ def get_nodes_and_disks():
             node['discovery'] = None
         node_id = node['id']
 
-        disks[node_id] = filter_disks(node['discovery'].get('block_device', {}))
+        disks[node_id] = filter_disks(
+            node['discovery'].get('block_device', {}))
         nodes[node_id] = {
             'disks': disks[node_id],
             # NOTE(prmtl): it really doesn't matter if it's mac
@@ -265,7 +269,8 @@ def generate_spaces(nodes, disks):
 
         disk = DISKS[node_id][0]
 
-        parteds[node_id], partitions[node_id] = make_parted_and_partitions(disk)
+        parteds[node_id], partitions[node_id] = make_parted_and_partitions(
+            disk)
         fss[node_id] = deepcopy(FS)
         pvs[node_id] = make_pv(disk)
         vgs[node_id] = make_vg(pvs[node_id].values())

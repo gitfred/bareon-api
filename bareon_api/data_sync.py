@@ -45,7 +45,7 @@ class DiscoveryDriver(DataSourceBase):
     """
     def sync_all(self):
         set_spaces(*get_nodes_and_disks())
-        set_nodes_and_disks(*generate_spaces(models.NODES, models.DISKS))
+        set_nodes_and_disks(*generate_spaces(models.NODES))
 
     def sync_list(self, node_ids):
         raise NotImplementedError

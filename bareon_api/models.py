@@ -254,7 +254,19 @@ def get_nodes_and_disks():
     return nodes, disks
 
 
-def generate_spaces(nodes, disks):
+def generate_spaces_for_node(node_id):
+    disk = DISKS[node_id][0]
+
+    PARTEDS[node_id], PARTITIONS[node_id] = make_parted_and_partitions(
+        disk)
+    FSS[node_id] = deepcopy(FS)
+    PVS[node_id] = make_pv(disk)
+    VGS[node_id] = make_vg(PVS[node_id].values())
+    vg = VGS[node_id].values()[0]
+    LVS[node_id] = make_lv(vg)
+
+
+def generate_spaces(nodes):
     fss = {}
     partitions = {}
     parteds = {}
@@ -292,6 +304,8 @@ VGS = {}
 LVS = {}
 
 REPOS = {}
+
+ALL_MODELS = (NODES, DISKS, FSS, PARTITIONS, PARTEDS, PVS, VGS, LVS, REPOS)
 
 
 def set_repos_for_node(node_id, repos_dict):

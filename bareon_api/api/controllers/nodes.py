@@ -171,6 +171,14 @@ class DisksController(rest.RestController):
         node_id = node_id.lower()
         return get_or_404(models.DISKS, node_id)
 
+    @pecan.expose(template='json')
+    def put(self, node_id):
+        node_id = node_id.lower()
+        models.DISKS[node_id] = pecan.request.json
+        # FIXME(sbrzeczkowski): it should be asynchronous
+        models.generate_spaces_for_node(node_id)
+        return models.DISKS[node_id]
+
 
 class ReposController(rest.RestController):
     model = models.Repo
@@ -212,5 +220,19 @@ class NodesController(rest.RestController):
         return models.NODES[node_id]
 
     @pecan.expose(template='json')
+    def post(self):
+        node_data = pecan.request.json
+        node_id = node_data['id']
+        models.NODES[node_id] = node_data
+        return models.NODES[node_id]
+
+    @pecan.expose(template='json')
     def get_all(self):
         return models.NODES.values()
+
+    @pecan.expose(template='json')
+    def delete(self, node_id):
+        node_id = node_id.lower()
+        for model in models.ALL_MODELS:
+            model.pop(node_id, None)
+        pecan.abort(204)

@@ -216,8 +216,10 @@ def get_nodes_and_disks():
     # during the discovery
     def is_disk(block_device):
         return (block_device.get('vendor') in ('ATA', )
-                # disks from nailgun scanner
-                or block_device.get('model'))
+                # FIXME(sbrzeczkowsk) disks from nailgun scanner are recognized
+                # by having 'model' key inside block_device dict. It's uber
+                # ugly and bug vulnerable. <PoC>
+                or 'model' in block_device)
 
     def get_nodes_discovery_data():
         discovery_url = 'http://{ip}:{port}/'.format(

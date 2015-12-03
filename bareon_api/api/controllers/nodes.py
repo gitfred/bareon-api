@@ -133,26 +133,27 @@ class PartitioningCotroller(rest.RestController):
 
     @pecan.expose(template='json')
     def get(self, node_id):
-        node_id = node_id.lower()
+        # node_id = node_id.lower()
 
-        if node_id not in models.NODES:
-            pecan.abort(404)
+        # if node_id not in models.NODES:
+        #     pecan.abort(404)
 
-        fss = models.FSS[node_id].values()
-        lvs = models.LVS[node_id].values()
-        parteds = models.PARTEDS[node_id].values()
-        pvs = models.PVS[node_id].values()
-        vgs = models.VGS[node_id].values()
+        # fss = models.FSS[node_id].values()
+        # lvs = models.LVS[node_id].values()
+        # parteds = models.PARTEDS[node_id].values()
+        # pvs = models.PVS[node_id].values()
+        # vgs = models.VGS[node_id].values()
 
-        data = {
-            'fss': fss,
-            "lvs": lvs,
-            'parteds': parteds,
-            'pvs': pvs,
-            'vgs': vgs,
-        }
+        # data = {
+        #     'fss': fss,
+        #     "lvs": lvs,
+        #     'parteds': parteds,
+        #     'pvs': pvs,
+        #     'vgs': vgs,
+        # }
 
-        return data
+        # return data
+        return models.CONTROLLER_SCHEME
 
 
 class DisksController(rest.RestController):

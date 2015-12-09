@@ -20,7 +20,7 @@ def data_sync():
 
 
 def run():
-    sync_all_nodes()
+    # sync_all_nodes() # just for the demo without discovery
     paste_conf = os.path.join(os.sep, 'etc', 'bareon-api', 'bareon-api-paste.ini')
     if not os.path.lexists(paste_conf):
         paste_conf = os.path.join(current_dir, '..', 'etc', 'bareon', 'bareon-api-paste.ini')
